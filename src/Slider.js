@@ -348,6 +348,12 @@ export default class Slider extends PureComponent {
 
   _handlePanResponderGrant = (e: Object, gestureState: Object ) => {
     this._previousLeft = this.props.trackPressable ? e.nativeEvent.locationX - (this.props.thumbTouchSize.width/2) : this._getThumbLeft(this._getCurrentValue());
+
+    if(this.props.trackPressable){
+      console.log('Pressable in grant and fire onValueChange');
+      this._setCurrentValue(this._getValue(gestureState));
+      this._fireChangeEvent('onValueChange');
+    }
     this._fireChangeEvent('onSlidingStart');
   };
 
@@ -372,9 +378,6 @@ export default class Slider extends PureComponent {
 
     this._setCurrentValue(this._getValue(gestureState));
 
-    if(this.props.trackPressable){
-      this._fireChangeEvent('onValueChange');
-    }
     this._fireChangeEvent('onSlidingComplete');
   };
 
