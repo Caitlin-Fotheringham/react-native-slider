@@ -83,10 +83,20 @@ export default class Slider extends PureComponent {
     step: PropTypes.number,
 
     /**
+     * Custom component used for the track to the left of the button.
+     */
+    customMinimumTrack: PropTypes.any,
+
+    /**
      * The color used for the track to the left of the button. Overrides the
      * default blue gradient image.
      */
     minimumTrackTintColor: PropTypes.string,
+
+    /**
+    * Custom component used for the track to the right of the button.
+    */
+    customMaximumTrack: PropTypes.any,
 
     /**
      * The color used for the track to the right of the button. Overrides the
@@ -142,6 +152,11 @@ export default class Slider extends PureComponent {
      * The style applied to the thumb.
      */
     thumbStyle: ViewPropTypes.style,
+
+    /**
+     * Sets an custom component for the thumb.
+     */
+    customThumb: PropTypes.any,
 
     /**
      * Sets an image for the thumb.
@@ -225,8 +240,11 @@ export default class Slider extends PureComponent {
       minimumValue,
       maximumValue,
       minimumTrackTintColor,
+      customMinimumTrack,
       maximumTrackTintColor,
+      customMaximumTrack,
       thumbTintColor,
+      customThumb,
       thumbImage,
       styles,
       style,
@@ -287,17 +305,26 @@ export default class Slider extends PureComponent {
           ]}
           renderToHardwareTextureAndroid
           onLayout={this._measureTrack}
-        />
+        >
+          {customMaximumTrack}
+        </View>
         <Animated.View
           renderToHardwareTextureAndroid
           style={[mainStyles.track, trackStyle, minimumTrackStyle]}
-        />
+        >
+          {customMinimumTrack}
+        </Animated.View>
         <Animated.View
           onLayout={this._measureThumb}
           renderToHardwareTextureAndroid
           style={[
             { backgroundColor: thumbTintColor },
-            mainStyles.thumb,
+            customThumb
+              ? {
+                  position: 'absolute',
+                  backgroundColor: 'transparent',
+                }
+              : mainStyles.thumb,
             thumbStyle,
             {
               transform: [{ translateX: thumbLeft }, { translateY: 0 }],
@@ -306,6 +333,7 @@ export default class Slider extends PureComponent {
           ]}
         >
           {this._renderThumbImage()}
+          {customThumb}
         </Animated.View>
         <View
           renderToHardwareTextureAndroid
