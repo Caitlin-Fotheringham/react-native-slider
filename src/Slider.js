@@ -198,7 +198,7 @@ export default class Slider extends PureComponent {
     debugTouchArea: false,
     animationType: 'timing',
     trackPressable: false,
-    linearGradient: false
+    linearGradient: true
   };
 
   state = {
