@@ -335,6 +335,11 @@ export default class Slider extends PureComponent {
             colors={linearGradientColors}
             start={{x: 0.0, y: 1.0}} 
             end={{x: 1.0, y: 1.0}}
+            style={{
+              borderStyle: 'solid',
+              borderWidth: 1,
+              borderColor: 'green'
+            }}
           >
             {this.minimumTrackAndThumb}
           </LinearGradient>
@@ -641,5 +646,5 @@ var defaultStyles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: 'green',
     opacity: 0.5,
-  },
+  }
 });
