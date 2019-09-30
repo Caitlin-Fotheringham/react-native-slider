@@ -329,8 +329,6 @@ export default class Slider extends PureComponent {
           renderToHardwareTextureAndroid
           onLayout={this._measureTrack}
         />
-        {
-          linearGradient ?
           <LinearGradient 
             colors={linearGradientColors}
             start={{x: 0.0, y: 1.0}} 
@@ -344,9 +342,6 @@ export default class Slider extends PureComponent {
           >
             {this.minimumTrackAndThumb}
           </LinearGradient>
-          :
-          this.minimumTrackAndThumb
-        }
         <View
           renderToHardwareTextureAndroid
           style={[defaultStyles.touchArea, touchOverflowStyle]}
