@@ -338,7 +338,8 @@ export default class Slider extends PureComponent {
             style={{
               borderStyle: 'solid',
               borderWidth: 1,
-              borderColor: 'green'
+              borderColor: 'green',
+              flex: 1
             }}
           >
             {this.minimumTrackAndThumb}
