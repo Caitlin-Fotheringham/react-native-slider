@@ -85,16 +85,6 @@ export default class Slider extends PureComponent {
     step: PropTypes.number,
 
     /**
-     * Used to track whether to apply colour gradient to slider.
-     */
-    linearGradient: PropTypes.boolean,
-
-    /**
-     * Used to define array of colours used in colour gradient.
-     */
-    linearGradientColors: PropTypes.arrayOf(PropTypes.string),
-
-    /**
      * The color used for the track to the left of the button. Overrides the
      * default blue gradient image.
      */
@@ -198,7 +188,6 @@ export default class Slider extends PureComponent {
     debugTouchArea: false,
     animationType: 'timing',
     trackPressable: false,
-    linearGradient: true
   };
 
   state = {
@@ -250,8 +239,6 @@ export default class Slider extends PureComponent {
       thumbTouchSize,
       animationType,
       animateTransitions,
-      linearGradient,
-      linearGradientColors,
       ...other
     } = this.props;
     const {
@@ -329,19 +316,7 @@ export default class Slider extends PureComponent {
           renderToHardwareTextureAndroid
           onLayout={this._measureTrack}
         />
-          <LinearGradient 
-            colors={linearGradientColors}
-            start={{x: 0.0, y: 1.0}} 
-            end={{x: 1.0, y: 1.0}}
-            style={{
-              borderStyle: 'solid',
-              borderWidth: 1,
-              borderColor: 'green',
-              flex: 1
-            }}
-          >
-            {this.minimumTrackAndThumb}
-          </LinearGradient>
+        {this.minimumTrackAndThumb}
         <View
           renderToHardwareTextureAndroid
           style={[defaultStyles.touchArea, touchOverflowStyle]}
