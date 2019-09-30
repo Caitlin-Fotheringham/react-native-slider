@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import LinearGradient from 'react-native-linear-gradient';
+
 import {
   Animated,
   Image,
@@ -83,20 +85,20 @@ export default class Slider extends PureComponent {
     step: PropTypes.number,
 
     /**
-     * Custom component used for the track to the left of the button.
+     * Used to track whether to apply colour gradient to slider.
      */
-    customMinimumTrack: PropTypes.any,
+    linearGradient: PropTypes.boolean,
+
+    /**
+     * Used to define array of colours used in colour gradient.
+     */
+    linearGradientColors: PropTypes.arrayOf(PropTypes.string),
 
     /**
      * The color used for the track to the left of the button. Overrides the
      * default blue gradient image.
      */
     minimumTrackTintColor: PropTypes.string,
-
-    /**
-    * Custom component used for the track to the right of the button.
-    */
-    customMaximumTrack: PropTypes.any,
 
     /**
      * The color used for the track to the right of the button. Overrides the
@@ -154,11 +156,6 @@ export default class Slider extends PureComponent {
     thumbStyle: ViewPropTypes.style,
 
     /**
-     * Sets an custom component for the thumb.
-     */
-    customThumb: PropTypes.any,
-
-    /**
      * Sets an image for the thumb.
      */
     thumbImage: Image.propTypes.source,
@@ -201,6 +198,7 @@ export default class Slider extends PureComponent {
     debugTouchArea: false,
     animationType: 'timing',
     trackPressable: false,
+    linearGradient: false
   };
 
   state = {
@@ -240,11 +238,8 @@ export default class Slider extends PureComponent {
       minimumValue,
       maximumValue,
       minimumTrackTintColor,
-      customMinimumTrack,
       maximumTrackTintColor,
-      customMaximumTrack,
       thumbTintColor,
-      customThumb,
       thumbImage,
       styles,
       style,
@@ -255,6 +250,8 @@ export default class Slider extends PureComponent {
       thumbTouchSize,
       animationType,
       animateTransitions,
+      linearGradient,
+      linearGradientColors,
       ...other
     } = this.props;
     const {
@@ -289,6 +286,32 @@ export default class Slider extends PureComponent {
       ...valueVisibleStyle,
     };
 
+    minimumTrackAndThumb = () => {
+      return(
+        <>
+          <Animated.View
+          renderToHardwareTextureAndroid
+          style={[mainStyles.track, trackStyle, minimumTrackStyle]}
+          />
+          <Animated.View
+            onLayout={this._measureThumb}
+            renderToHardwareTextureAndroid
+            style={[
+              { backgroundColor: thumbTintColor },
+              mainStyles.thumb,
+              thumbStyle,
+              {
+                transform: [{ translateX: thumbLeft }, { translateY: 0 }],
+                ...valueVisibleStyle,
+              },
+            ]}
+          >
+            {this._renderThumbImage()}
+          </Animated.View>
+        </>
+      );
+    }
+
     const touchOverflowStyle = this._getTouchOverflowStyle();
 
     return (
@@ -305,36 +328,19 @@ export default class Slider extends PureComponent {
           ]}
           renderToHardwareTextureAndroid
           onLayout={this._measureTrack}
-        >
-          {customMaximumTrack}
-        </View>
-        <Animated.View
-          renderToHardwareTextureAndroid
-          style={[mainStyles.track, trackStyle, minimumTrackStyle]}
-        >
-          {customMinimumTrack}
-        </Animated.View>
-        <Animated.View
-          onLayout={this._measureThumb}
-          renderToHardwareTextureAndroid
-          style={[
-            { backgroundColor: thumbTintColor },
-            customThumb
-              ? {
-                  position: 'absolute',
-                  backgroundColor: 'transparent',
-                }
-              : mainStyles.thumb,
-            thumbStyle,
-            {
-              transform: [{ translateX: thumbLeft }, { translateY: 0 }],
-              ...valueVisibleStyle,
-            },
-          ]}
-        >
-          {this._renderThumbImage()}
-          {customThumb}
-        </Animated.View>
+        />
+        {
+          linearGradient ?
+          <LinearGradient 
+            colors={linearGradientColors}
+            start={{x: 0.0, y: 1.0}} 
+            end={{x: 1.0, y: 1.0}}
+          >
+            {this.minimumTrackAndThumb}
+          </LinearGradient>
+          :
+          this.minimumTrackAndThumb
+        }
         <View
           renderToHardwareTextureAndroid
           style={[defaultStyles.touchArea, touchOverflowStyle]}
